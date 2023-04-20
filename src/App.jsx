@@ -12,6 +12,8 @@ function App() {
     /* console.log(e) */
   setHook((state) => state = state + 1)
 }
+
+console.log('HHHEEEELLLLO LOU');
   return (
     <div className="App">
       <Header myTitle={'Title'} attributes={{name: 'all'}}>
