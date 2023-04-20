@@ -12,5 +12,6 @@
 }
 
 .search__input:focus {
-    border: none;
+        background-color: #ffffff;
+    border: 1px solid #ffe44d;;
 }

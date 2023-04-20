@@ -12,8 +12,6 @@ export const CardList = ({ cards }) => { //деструктуризация. К�
             {cards.map((item) => {
                 return <Card key={item.name} {...item} product={item} />; //передать product в card/деструктуризация
             })}
-
-
         </div>
     );
 };

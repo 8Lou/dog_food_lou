@@ -1,7 +1,7 @@
 import React from "react";
 import './index.css'
 
-import { ReactComponent as like } from "./img/like.svg";
+import { ReactComponent as Like } from "./img/like.svg";
 
 export const Card = (props) => { //деструктуризация
     console.log(props);
@@ -20,11 +20,11 @@ export const Card = (props) => { //деструктуризация
                 </span>}
                 {/* <div className={`tag_type_${new}`}></div> теги */}
             </div>
-            <div className="card__sticky card__sticky_type_top-right"><like /></div>
+            <div className="card__sticky card__sticky_type_top-right"><Like /></div>
             <a href="/" className="card__link">
                 <img src={product.picture ?? product.image} alt="food" className="card__image" /> {/* рендеринг фото из БД */}
                 <div className="card__desc">
-                    <span className="card__price">{product.price ?? product.gender}</span>
+                    <span className="card__price">{product.price ?? product.gender} p.</span>
                     <span className="card__wight">100 гр</span>
                 </div>
                 <p className="card__name">{product.name}</p> {/* рендеринг списка из базы данных/data */}
