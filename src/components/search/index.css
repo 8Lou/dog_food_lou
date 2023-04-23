@@ -9,9 +9,11 @@
     color: black;
     padding: 14px 20px;
     border: 1px solid transparent;
+    outline: none; /* удалить окантовку */
 }
 
 .search__input:focus {
-        background-color: #ffffff;
-    border: 1px solid #ffe44d;;
+    background-color: #ffffff;
+    border: 1px solid #ffe44d;
+    ;
 }

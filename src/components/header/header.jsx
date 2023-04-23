@@ -3,10 +3,11 @@ import './index.css';
 // import { Logo } from '../logo/logo';
 import { ReactComponent as LogoSvg } from "../logo/logo.svg"; /* подключение логотипа svg */
 /* тогда в return прописывается: <Logo /> */
-import s from './style.module.css'
+import styles from './style.module.css'
 import { Search } from "../search/search";
 
 export const Header = (props) => {
+    
     const setSearchQuery = (path) => {
         // console.log({path});
         props.setSearch(path);

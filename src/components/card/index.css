@@ -103,7 +103,10 @@
     margin-top: auto;
 }
 
-
+.card__favorite_active>svg {
+    fill: red;
+    stroke: red;
+}
 
 .card__link {
     text-decoration: none;
@@ -153,5 +156,5 @@ svg {
 }
 
 .card__liked>svg {
-    fill: red;
+    /* fill: red; */
 }
