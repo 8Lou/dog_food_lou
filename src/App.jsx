@@ -8,12 +8,14 @@ import { Header } from './components/header/header.jsx';
 import { useDebounce } from './hooks/hooks'
 import { api, getProductList } from "./utils/api";
 
-// const [example, setExample] = useState();
+// const [example, setExample] = useState(); нельзя!
 
 //создание компонентов для переиспользования
 function App() {
 
-  /* const [hook, setHook] = useState(0); */ /* объявляется хук с первоначальным значением 0, идет к (24) строке */
+  // состояние карточек
+  /* объявляется хук с первоначальным значением 0 */
+  /* const [hook, setHook] = useState(0); */
   const [cards, setCards] = useState([]);
   const [search, setSearch] = useState(undefined);
   const [user, setUser] = useState({});
@@ -29,8 +31,9 @@ function App() {
   /* useEffect запустился когда вся логика отработала */
   /* если рядом положить массив зависимостей, напр[search], после изменений в нем остработает вложенная функция. Т.е.второй раз */
 
+  /* фильтрация картинок в АПИ по ай ди авторов */
   const filteredCards = (cards) => {
-    return cards.filter(e => e.author._id === '622bd81b06c7d323b8ae4614' || e.author._id === '6249a24d392d360b78ab233a')
+    return cards.filter(e => e.author._id === '622bd81b06c7d323b8ae4614' || e.author._id === '644573ee3291d790b3073d8d')
   }
 
   const debounceValueInApp = useDebounce(search)
@@ -39,13 +42,15 @@ function App() {
   const handleProductLike = async (product, isLiked) => {
     const updatedCard = await api.changeProductLike(product._id, isLiked);
 
+    //на каждый элемент в массиве, если обновлен, то найти и вернуть обновленную карточку, иниче ничего
     const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e);
     const index = cards.findIndex(e => e._id === updatedCard._id);
     if (index !== -1) {
-      setCards(state => [...state.slice(0, index), updatedCard, ...state.slice(index + 1)])
+      setCards(state => [...state.slice(0, index), updatedCard, ...state.slice(index + 1)]) // массив обрезать от 0-индекса, вставить
     }
     // setCards([...newCards])
 
+    // ИЛИ (но не подходит для оптимизации большого колличества карточек) :
     // const deleteCard = () => {
     //   const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e)
     //   setCards([...newCards])
