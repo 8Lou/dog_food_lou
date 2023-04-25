@@ -105,7 +105,7 @@
 
 .card__favorite_active>svg {
     fill: red;
-    stroke: red;
+    stroke: red; /* обрамление */
 }
 
 .card__link {

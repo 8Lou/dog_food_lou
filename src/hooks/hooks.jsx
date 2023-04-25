@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react'
 
+/* кастомный хук, чтобы при наборе сёрч не торопился производить поиск, не перегружал серевер */
+/* можно использовать отложенный старт или setTimeout */
 export const useDebounce = (path) => {
   // 'мягкая'
   const [debounceValue, setDebounceValue] = useState(path);
