@@ -11,7 +11,44 @@
     gap: 80px;
 }
 
+.header__icons {
+    display: flex;
+    gap: 2rem;
+}
+
+.header__icon {
+    stroke: none;
+    fill: black;
+    cursor: pointer;
+}
+
+.header__fav {
+    position: relative;
+}
+
+.header__like {
+    stroke: none;
+    fill: grey;
+}
+
+.header__bubble {
+    position: absolute;
+    width: 19px;
+    height: 14px;
+    left: 60%;
+    bottom: 50%;
+    background: #01a54e;
+    border: 2px solid #ffe44d;
+    border-radius: 20px;
+    color: white;
+    font-size: 11px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .logo {
-    fill: blue;
-    stroke: aqua;
+    /*     fill: blue;
+    stroke: aqua; */
 }

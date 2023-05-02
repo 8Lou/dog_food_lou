@@ -4,7 +4,7 @@ import { Card } from './card/card'
 import './index.css'
 
 /* РЕНДЕРИНГ КАРТОЧЕК */
-export const CardList = ({ cardss, userId, handleLike }) => { //деструктуризация. Компонент получает данные
+export const CardList = ({ cards, userId, handleLike }) => { //деструктуризация. Компонент получает данные
 
 
     return (
