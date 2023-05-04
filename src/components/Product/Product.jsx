@@ -38,7 +38,7 @@ export const Product = ({ product }) => {
         </div>
         <div className={s.desc}>
             <NavLink className={(res) =>
-                res.isPending ? "pending" : res.isActive ? s.link : ""
+                res.isPending ? "pending" : res.isActive ? s.link : "" //NavLink даёт возм-ть стилизовать link
             }>
 
                 <span className={s.price}>Описание</span>

@@ -8,8 +8,9 @@ import { UserContext } from '../../context/userContext';
 import { CardsContext } from '../../context/cardContext';
 import { ThemeContext } from '../../context/themeContext';
 
-/* export const Card = (props) => {  *///деструктуризация
+/* export const Card = (props) => {  */  //деструктуризация
 export const Card = ({ name, price, wight, pictures, image, gender, likes, discount, userId, product, ...args }) => {
+    
     const user = useContext(UserContext);
     const { handleLike } = useContext(CardsContext);
     /*     console.log(props);
