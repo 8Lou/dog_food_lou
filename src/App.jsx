@@ -5,8 +5,20 @@ import { Footer } from './components/footer/footer.jsx';
 import { Header } from './components/header/header.jsx';
 /* import data from './components/data/data.json' */
 
-import { useDebounce } from './hooks/hooks'
-import { api, getProductList } from "./utils/api";
+import { api } from "./utils/api";
+import { useDebounce } from "./hooks/hooks";
+import { Product } from "./components/Product/Product";
+import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
+import { ProductPage } from "./pages/ProductPage/ProductPage";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { FavoritesPage } from "./pages/FavoritesPage/FavoritesPage";
+import { RouterAuth } from "./router/Router";
+import { UserContext } from './context/userContext'
+import { CardsContext } from "./context/cardContext";
+import { ThemeContext } from "./context/themeContext";
+import { filteredCards, findLiked } from "./utils/utils";
+import { CHEAPEST, EXPENSIVE, NEWEST, POPULAR, RATE, SALE } from "./constants/constants";
+
 
 // const [example, setExample] = useState(); нельзя!
 
@@ -18,7 +30,71 @@ function App() {
   /* const [hook, setHook] = useState(0); */
   const [cards, setCards] = useState([]);
   const [search, setSearch] = useState(undefined);
-  const [user, setUser] = useState({});
+  const [user, setUser] = React.useState({}); /* можно и так */
+  const [isAuthorized, setAuth] = useState(true);
+  const [favorites, setFavorites] = useState([]);
+  const [theme, setTheme] = useState(true);
+
+  const debounceValueInApp = useDebounce(search)
+
+
+  const handleProductLike = async (product, wasLiked) => {
+    const updatedCard = await api.changeProductLike(product._id, wasLiked);
+    const index = cards.findIndex(e => e._id === updatedCard._id);
+    if (index !== -1) {
+      setCards(state => [...state.slice(0, index), updatedCard, ...state.slice(index + 1)])
+    }
+    wasLiked ?
+      // setFavorites/ delete
+      setFavorites((state) => state.filter(f => f._id !== updatedCard._id))
+      :
+      // setFavorites/ add
+      setFavorites((state) => [updatedCard, ...state])
+  }
+
+  const productRating = (reviews) => {
+    if (!reviews || !reviews.length) {
+      return 0;
+    }
+    const res = reviews.reduce((acc, el) => acc += el.rating, 0);
+    console.log(res / reviews.length);
+    return res / reviews.length
+  }
+
+  const onSort = (sortId) => {
+    if (sortId === CHEAPEST) {
+      const newCards = cards.sort((a, b) => a.price - b.price);
+      setCards([...newCards]);
+      return
+    }
+    if (sortId === EXPENSIVE) {
+      const newCards = cards.sort((a, b) => b.price - a.price);
+      setCards([...newCards]);
+      return
+    }
+    if (sortId === POPULAR) {
+      const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
+      setCards([...newCards]);
+      return
+    }
+    if (sortId === NEWEST) {
+      const newCards = cards.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setCards([...newCards]);
+      return
+    }
+
+    if (sortId === SALE) {
+      const newCards = cards.sort((a, b) => b.discount - a.discount);
+      setCards([...newCards]);
+      return
+    }
+    if (sortId === RATE) {
+      const newCards = cards.sort((a, b) => productRating(b.reviews) - productRating(a.reviews));
+      setCards([...newCards]);
+      return
+    }
+  }
+
 
   /* const [bigdata, setBigdata] = useState([]); */
 
@@ -32,103 +108,136 @@ function App() {
   /* если рядом положить массив зависимостей, напр[search], после изменений в нем остработает вложенная функция. Т.е.второй раз */
 
   /* фильтрация картинок в АПИ по ай ди авторов */
-  const filteredCards = (cards) => {
-    return cards.filter(e => e.author._id === '622bd81b06c7d323b8ae4614' || e.author._id === '644573ee3291d790b3073d8d')
-  }
+  /*   const filteredCards = (cards) => {
+      return cards.filter(e => e.author._id === '622bd81b06c7d323b8ae4614' || e.author._id === '644573ee3291d790b3073d8d')
+    } */
 
-  const debounceValueInApp = useDebounce(search)
+  /* const debounceValueInApp = useDebounce(search) */
 
 
-  const handleProductLike = async (product, isLiked) => {
-    const updatedCard = await api.changeProductLike(product._id, isLiked);
+  /* const handleProductLike = async (product, isLiked) => {
+    const updatedCard = await api.changeProductLike(product._id, isLiked); */
 
-    //на каждый элемент в массиве, если обновлен, то найти и вернуть обновленную карточку, иниче ничего
-    const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e);
-    const index = cards.findIndex(e => e._id === updatedCard._id);
-    if (index !== -1) {
-      setCards(state => [...state.slice(0, index), updatedCard, ...state.slice(index + 1)]) // массив обрезать от 0-индекса, вставить
-    }
-    // setCards([...newCards])
+  //на каждый элемент в массиве, если обновлен, то найти и вернуть обновленную карточку, иниче ничего
+  /*     const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e);
+      const index = cards.findIndex(e => e._id === updatedCard._id);
+      if (index !== -1) {
+        setCards(state => [...state.slice(0, index), updatedCard, ...state.slice(index + 1)]) // массив обрезать от 0-индекса, вставить
+      } */
+  // setCards([...newCards])
 
-    // ИЛИ (но не подходит для оптимизации большого колличества карточек) :
-    // const deleteCard = () => {
-    //   const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e)
-    //   setCards([...newCards])
-    // }
-    // const addCard = () => {
+  // ИЛИ (но не подходит для оптимизации большого колличества карточек) :
+  // const deleteCard = () => {
+  //   const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e)
+  //   setCards([...newCards])
+  // }
+  // const addCard = () => {
 
-    //   // const newCards = cards.map(e => {
-    //   //   if (e._id === updatedCard._id) {
-    //   //     return updatedCard
-    //   //   } 
-    //   //   return e
-    //   // })
-    //   const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e)
-    //   setCards([...newCards])
-    // }
-    // isLiked ? deleteCard() : addCard()
+  //   // const newCards = cards.map(e => {
+  //   //   if (e._id === updatedCard._id) {
+  //   //     return updatedCard
+  //   //   } 
+  //   //   return e
+  //   // })
+  //   const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e)
+  //   setCards([...newCards])
+  // }
+  // isLiked ? deleteCard() : addCard()
 
-    // console.log({ updatedCard });
-  }
-  useEffect(() => {
+  // console.log({ updatedCard });
+}
 
-    /*if (search === undefined) return;
-    api.searchProducts(search)
-      .then((data) => setCards(data)) */
+useEffect(() => {
 
-    if (debounceValueInApp === undefined) return;
-    api.searchProducts(debounceValueInApp)
-      .then((data) => setCards(filteredCards(data)))
+  /*if (search === undefined) return;
+  api.searchProducts(search)
+    .then((data) => setCards(data)) */
 
-  }, [debounceValueInApp])
+  if (debounceValueInApp === undefined) return;
+  api.searchProducts(debounceValueInApp)
+    .then((data) => setCards(filteredCards(data)))
 
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), getProductList()]).then(([userData, data]) => {
-      setUser(userData);
-      setCards(filteredCards(data.products));
-    });
+}, [debounceValueInApp]);
 
-  }, [])
 
-  /* если нет поиска, то остановить фильтрацию */
-  // const filtered = bigdata.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
-  // setCards(filtered);
-  /* но способ не возвращает все карточки обратно и миллион карточек на стороне пользователя искать неправильно */
-  /* }, [search]) */
+useEffect(() => {
+  Promise.all([api.getUserInfo(), api.getProductList()]).then(([userData, data]) => {
+    setUser(userData);
+    const filtered = filteredCards(data.products)
+    setCards(filtered);
+    const fav = filtered.filter(e => findLiked(e, userData._id));
+    // const fav = filtered.filter(e => e.likes.some(el => el === userData._id));
+    setFavorites(fav);
+  });
+}, []);
 
-  // console.log('end of working');
+const cardsValue = {
+  handleLike: handleProductLike,
+  cards: cards,
+  search,
+  favorites,
+  onSort,
+}
 
-  /* Два юзэффекта не использовать, бесконечный ререндер - закрыть страницу */
-  // useEffect(() => {
-  //   console.log('2nd useEffect');
+/* если нет поиска, то остановить фильтрацию */
+// const filtered = bigdata.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+// setCards(filtered);
+/* но способ не возвращает все карточки обратно и миллион карточек на стороне пользователя искать неправильно */
+/* }, [search]) */
 
-  //   setSearch((state) => state + 'a')
+// console.log('end of working');
 
-  // }, [hook])
+/* Два юзэффекта не использовать, бесконечный ререндер - закрыть страницу */
+// useEffect(() => {
+//   console.log('2nd useEffect');
 
-  /* Promise.all принимает в себя массив запросов и только тогда позволяет их обработать по указанной очереди.
-  А такая запись не дает уверенности в нужной очередности: */
-  // api.getUserInfo().then(data => setUser(data));
-  // api.getUserInfo().then().then(()=> api.getProductList().then())
-  /* или */
-  // api.getProductList().then(data => setCards(data.products));
+//   setSearch((state) => state + 'a')
 
-  /* console.log({ user }); */
+// }, [hook])
+
+/* Promise.all принимает в себя массив запросов и только тогда позволяет их обработать по указанной очереди.
+А такая запись не дает уверенности в нужной очередности: */
+// api.getUserInfo().then(data => setUser(data));
+// api.getUserInfo().then().then(()=> api.getProductList().then())
+/* или */
+// api.getProductList().then(data => setCards(data.products));
+
+/* console.log({ user }); */
 
   return (
-    <div className="App">
-      <Header setSearch={setSearch}>
-      </Header>
-      <main className='container content'>
-        {/* <button id="btn" onClick={clicker}>click me state</button> */}
 
-        <CardList cards={cards} />
-      </main>
-      {/* {hook % 2 === 0 ?  */}
-      <Footer />
+  <div className={`app__${theme ? 'light' : 'dark'} `}>
+    <ThemeContext.Provider value={theme}>
+      <CardsContext.Provider value={cardsValue}>
+        <UserContext.Provider value={user}>
+          <Header setSearch={setSearch} favorites={favorites}>
+          </Header>
+          <button onClick={() => setTheme(!theme)}>change theme</button>
 
-    </div>
-  );
+          <main className='container content'>
+            {/* <button id="btn" onClick={clicker}>click me state</button> */}
+
+            {/* <CardList cards={cards} /> */}
+
+            {isAuthorized ?
+              <Routes>
+                <Route path="/" element={<CatalogPage />} />
+                <Route path="/favorites" element={<FavoritesPage />} />
+                <Route path="/product/:id" element={<ProductPage />} >
+                </Route>
+                <Route path="*" element={<div>NOT FOUND 404</div>} />
+              </Routes>
+              :
+              <Navigate to={'/not-found'} />
+            }
+          </main>
+          {/* {hook % 2 === 0 ?  */}
+          <Footer />
+        </UserContext.Provider>
+      </CardsContext.Provider>
+    </ThemeContext.Provider>
+  </div>
+);
 }
 
 export default App;

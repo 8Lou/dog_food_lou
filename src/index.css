@@ -17,6 +17,7 @@ code {
   padding-left: 1rem;
   /* 1rem=16px=корневого родителя */
   padding-right: 1rem;
+  margin: 0 auto;
 }
 .content {
   padding: 20px 0;

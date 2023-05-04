@@ -1,5 +1,5 @@
 import React from "react";
-import logoDF from '.logo.svg';
+import logoDF from './logo.svg';
 import './index.css';
 import { LogoEx } from './logoExample';
 

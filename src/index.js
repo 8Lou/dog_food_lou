@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { BrowserRouter } from "react-router-dom";
+
 /* import reportWebVitals from './reportWebVitals'; */
 
 // console.log("this is elem", document.getElementById("root"));
@@ -14,9 +16,13 @@ import App from './App';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-/* root.render(
- */
-// console.log({ root });
+
+
+root.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
 
 // const element = <div>1stelemt</div>;
 
@@ -40,11 +46,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 //   return <div> div </div>;
 // };
 
-root.render(
+//root.render(
     // <div>
     //   <Example />
     //   <NewEx />
     //   <SecondEx />
     // </div>
-    <App />
-);
+//    <App />
+//);

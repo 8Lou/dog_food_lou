@@ -10,7 +10,7 @@ export const CardList = ({ cards, userId, handleLike }) => { //деструкт�
     return (
         <div className="cards">
             {cards.map((item) => {
-                return <Card key={item.updated_at} {...item} product={item} userId={userId} handleLike={handleLike} />; //передать product в card/деструктуризация
+                return <Card key={item.updated_at} {...item} product={item} /* userId={userId} handleLike={handleLike} */ />; //передать product в card/деструктуризация
             })}
         </div>
     );

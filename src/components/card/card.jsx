@@ -65,7 +65,7 @@ export const Card = ({ name, price, wight, pictures, image, gender, likes, disco
                     <span className="card__price">{price ?? gender} p.</span>
                     <span className="card__wight">{wight}</span>
                 </div>
-                <p className="card__name">{product.name}</p> {/* рендеринг списка из базы данных/data */}
+                <p className="card__name">{name}</p> {/* рендеринг списка из базы данных/data */}
                 {/* </a> */}
             </Link>
             <span className="card__card btn btn_primary">В корзину</span>

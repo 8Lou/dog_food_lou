@@ -31,8 +31,7 @@ export const Header = (props) => {
                 </Link>
                 {/*  <Logo /> */} {/* 1й способ подключить компонент-логотип */}
                 {/* <input /> */}
-                /*<Search setSearch={setSearchQuery} /> */ {/* сюда передается компонент из search */}
-                {location.pathname === '/' && <Search setSearch={setSearchQuery} />}
+                {location.pathname === '/' && <Search setSearch={setSearchQuery} />} {/* сюда передается компонент из search */}
                 <div className='header__icons'>
                     <Link className='header__fav' to={'/favorites'}>
                         <Like className='header__like' />

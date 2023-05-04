@@ -1,5 +1,8 @@
-.App {
-/*   background-color: #61dafb;
-  height: 100%; */
+.app__light {
+  background-color: white;
+}
+
+.app__dark {
+  background-color: darkgray;
 }
 
