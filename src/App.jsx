@@ -60,14 +60,18 @@ function App() {
     console.log(res / reviews.length);
     return res / reviews.length
   }
-
+  
+  СОРТИРОВКА
   const onSort = (sortId) => {
+    /* если sortId === CHEAPEST, */
     if (sortId === CHEAPEST) {
+      /* отсортировать по возрастанию цены */
       const newCards = cards.sort((a, b) => a.price - b.price);
       setCards([...newCards]);
       return
     }
     if (sortId === EXPENSIVE) {
+      /* отсортировать по убыванию цены */
       const newCards = cards.sort((a, b) => b.price - a.price);
       setCards([...newCards]);
       return

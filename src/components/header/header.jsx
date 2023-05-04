@@ -35,7 +35,7 @@ export const Header = (props) => {
                 <div className='header__icons'>
                     <Link className='header__fav' to={'/favorites'}>
                         <Like className='header__like' />
-                        {!!favorites.length && <span className='header__bubble'>{favorites.length}</span>}
+                        {!!favorites.length && <span className='header__bubble'>{favorites.length}</span>} {/* использовать роут */}
                     </Link>
                     <Basket className='header__icon' />
                     <Profile className='header__icon' />
