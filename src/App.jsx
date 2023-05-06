@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import { CardList } from './components/card_list/card_list.jsx';
-import { Footer } from './components/footer/footer.jsx';
-import { Header } from './components/header/header.jsx';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import { CardList } from "./components/card_list/card_list.jsx";
+import { Footer } from "./components/footer/footer.jsx";
+import { Header } from "./components/header/header.jsx";
 /* import data from './components/data/data.json' */
 
 import { api } from "./utils/api";
@@ -13,18 +13,23 @@ import { ProductPage } from "./pages/ProductPage/ProductPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { FavoritesPage } from "./pages/FavoritesPage/FavoritesPage";
 import { RouterAuth } from "./router/Router";
-import { UserContext } from './context/userContext'
+import { UserContext } from "./context/userContext";
 import { CardsContext } from "./context/cardContext";
 import { ThemeContext } from "./context/themeContext";
 import { filteredCards, findLiked } from "./utils/utils";
-import { CHEAPEST, EXPENSIVE, NEWEST, POPULAR, RATE, SALE } from "./constants/constants";
-
+import {
+  CHEAPEST,
+  EXPENSIVE,
+  NEWEST,
+  POPULAR,
+  RATE,
+  SALE,
+} from "./constants/constants";
 
 // const [example, setExample] = useState(); нельзя!
 
 //создание компонентов для переиспользования
 function App() {
-
   // состояние карточек
   /* объявляется хук с первоначальным значением 0 */
   /* const [hook, setHook] = useState(0); */
@@ -35,70 +40,75 @@ function App() {
   const [favorites, setFavorites] = useState([]);
   const [theme, setTheme] = useState(true);
 
-  const debounceValueInApp = useDebounce(search)
-
+  const debounceValueInApp = useDebounce(search);
 
   const handleProductLike = async (product, wasLiked) => {
     const updatedCard = await api.changeProductLike(product._id, wasLiked);
-    const index = cards.findIndex(e => e._id === updatedCard._id);
+    const index = cards.findIndex((e) => e._id === updatedCard._id);
     if (index !== -1) {
-      setCards(state => [...state.slice(0, index), updatedCard, ...state.slice(index + 1)])
+      setCards((state) => [
+        ...state.slice(0, index),
+        updatedCard,
+        ...state.slice(index + 1),
+      ]);
     }
-    wasLiked ?
-      // setFavorites/ delete
-      setFavorites((state) => state.filter(f => f._id !== updatedCard._id))
-      :
-      // setFavorites/ add
-      setFavorites((state) => [updatedCard, ...state])
-  }
+    wasLiked
+      ? // setFavorites/ delete
+        setFavorites((state) => state.filter((f) => f._id !== updatedCard._id))
+      : // setFavorites/ add
+        setFavorites((state) => [updatedCard, ...state]);
+  };
 
   const productRating = (reviews) => {
     if (!reviews || !reviews.length) {
       return 0;
     }
-    const res = reviews.reduce((acc, el) => acc += el.rating, 0);
+    const res = reviews.reduce((acc, el) => (acc += el.rating), 0);
     console.log(res / reviews.length);
-    return res / reviews.length
-  }
-  
-  СОРТИРОВКА
+    return res / reviews.length;
+  };
+
+  /* 2 СОРТИРОВКА */
   const onSort = (sortId) => {
     /* если sortId === CHEAPEST, */
     if (sortId === CHEAPEST) {
       /* отсортировать по возрастанию цены */
       const newCards = cards.sort((a, b) => a.price - b.price);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === EXPENSIVE) {
       /* отсортировать по убыванию цены */
       const newCards = cards.sort((a, b) => b.price - a.price);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === POPULAR) {
       const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === NEWEST) {
-      const newCards = cards.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const newCards = cards.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
       setCards([...newCards]);
-      return
+      return;
     }
 
     if (sortId === SALE) {
       const newCards = cards.sort((a, b) => b.discount - a.discount);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === RATE) {
-      const newCards = cards.sort((a, b) => productRating(b.reviews) - productRating(a.reviews));
+      const newCards = cards.sort(
+        (a, b) => productRating(b.reviews) - productRating(a.reviews)
+      );
       setCards([...newCards]);
-      return
+      return;
     }
-  }
-
+  };
 
   /* const [bigdata, setBigdata] = useState([]); */
 
@@ -117,7 +127,6 @@ function App() {
     } */
 
   /* const debounceValueInApp = useDebounce(search) */
-
 
   /* const handleProductLike = async (product, isLiked) => {
     const updatedCard = await api.changeProductLike(product._id, isLiked); */
@@ -140,7 +149,7 @@ function App() {
   //   // const newCards = cards.map(e => {
   //   //   if (e._id === updatedCard._id) {
   //   //     return updatedCard
-  //   //   } 
+  //   //   }
   //   //   return e
   //   // })
   //   const newCards = cards.map(e => e._id === updatedCard._id ? updatedCard : e)
@@ -149,117 +158,121 @@ function App() {
   // isLiked ? deleteCard() : addCard()
 
   // console.log({ updatedCard });
-}
 
-useEffect(() => {
-
-  /*if (search === undefined) return;
+  useEffect(() => {
+    /*if (search === undefined) return;
   api.searchProducts(search)
     .then((data) => setCards(data)) */
 
-  if (debounceValueInApp === undefined) return;
-  api.searchProducts(debounceValueInApp)
-    .then((data) => setCards(filteredCards(data)))
+    if (debounceValueInApp === undefined) return;
+    api
+      .searchProducts(debounceValueInApp)
+      .then((data) => setCards(filteredCards(data)));
+  }, [debounceValueInApp]);
 
-}, [debounceValueInApp]);
+  // Фильтрация по рейтенгу лайков
+  useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getProductList()]).then(
+      ([userData, data]) => {
+        setUser(userData);
+        const filtered = filteredCards(data.products);
+        setCards(filtered);
+        const fav = filtered.filter((e) => findLiked(e, userData._id));
+        // const fav = filtered.filter(e => e.likes.some(el => el === userData._id));
+        setFavorites(fav);
+      }
+    );
+  }, []);
 
+  /* 3 вэлью для контекста */
+  const cardsValue = {
+    handleLike: handleProductLike,
+    cards: cards,
+    search,
+    favorites,
+    onSort,
+  };
 
-useEffect(() => {
-  Promise.all([api.getUserInfo(), api.getProductList()]).then(([userData, data]) => {
-    setUser(userData);
-    const filtered = filteredCards(data.products)
-    setCards(filtered);
-    const fav = filtered.filter(e => findLiked(e, userData._id));
-    // const fav = filtered.filter(e => e.likes.some(el => el === userData._id));
-    setFavorites(fav);
-  });
-}, []);
+  /* если нет поиска, то остановить фильтрацию */
+  // const filtered = bigdata.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+  // setCards(filtered);
+  /* но способ не возвращает все карточки обратно и миллион карточек на стороне пользователя искать неправильно */
+  /* }, [search]) */
 
-const cardsValue = {
-  handleLike: handleProductLike,
-  cards: cards,
-  search,
-  favorites,
-  onSort,
-}
+  // console.log('end of working');
 
-/* если нет поиска, то остановить фильтрацию */
-// const filtered = bigdata.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
-// setCards(filtered);
-/* но способ не возвращает все карточки обратно и миллион карточек на стороне пользователя искать неправильно */
-/* }, [search]) */
+  /* Два юзэффекта не использовать, бесконечный ререндер - закрыть страницу */
+  // useEffect(() => {
+  //   console.log('2nd useEffect');
 
-// console.log('end of working');
+  //   setSearch((state) => state + 'a')
 
-/* Два юзэффекта не использовать, бесконечный ререндер - закрыть страницу */
-// useEffect(() => {
-//   console.log('2nd useEffect');
+  // }, [hook])
 
-//   setSearch((state) => state + 'a')
-
-// }, [hook])
-
-/* Promise.all принимает в себя массив запросов и только тогда позволяет их обработать по указанной очереди.
+  /* Promise.all принимает в себя массив запросов и только тогда позволяет их обработать по указанной очереди.
 А такая запись не дает уверенности в нужной очередности: */
-// api.getUserInfo().then(data => setUser(data));
-// api.getUserInfo().then().then(()=> api.getProductList().then())
-/* или */
-// api.getProductList().then(data => setCards(data.products));
+  // api.getUserInfo().then(data => setUser(data));
+  // api.getUserInfo().then().then(()=> api.getProductList().then())
+  /* или */
+  // api.getProductList().then(data => setCards(data.products));
 
-/* console.log({ user }); */
+  /* console.log({ user }); */
 
+  /*  2 КОНТЕКСТ вставить туда, где нужно увидеть */
   return (
+    <div className={`app__${theme ? "light" : "dark"} `}>
+      <ThemeContext.Provider value={theme}>
+        {" "}
+        {/* смена темы */}
+        <CardsContext.Provider value={cardsValue}>
+          <UserContext.Provider value={user}>
+            <Header setSearch={setSearch} favorites={favorites}></Header>
+            <button onClick={() => setTheme(!theme)}>change theme</button>{" "}
+            {/* кнопка смены темы */}
+            <main className="container content">
+              {/* <button id="btn" onClick={clicker}>click me state</button> */}
 
-  <div className={`app__${theme ? 'light' : 'dark'} `}>
-    <ThemeContext.Provider value={theme}>
-      <CardsContext.Provider value={cardsValue}>
-        <UserContext.Provider value={user}>
-          <Header setSearch={setSearch} favorites={favorites}>
-          </Header>
-          <button onClick={() => setTheme(!theme)}>change theme</button>
+              {/* <CardList cards={cards} /> */}
 
-          <main className='container content'>
-            {/* <button id="btn" onClick={clicker}>click me state</button> */}
-
-            {/* <CardList cards={cards} /> */}
-
-            {isAuthorized ?
-              <Routes>
-                <Route path="/" element={<CatalogPage />} />
-                <Route path="/favorites" element={<FavoritesPage />} />
-                <Route path="/product/:id" element={<ProductPage />} >
-                </Route>
-                <Route path="*" element={<div>NOT FOUND 404</div>} />
-              </Routes>
-              :
-              <Navigate to={'/not-found'} />
-            }
-          </main>
-          {/* {hook % 2 === 0 ?  */}
-          <Footer />
-        </UserContext.Provider>
-      </CardsContext.Provider>
-    </ThemeContext.Provider>
-  </div>
-);
+              {isAuthorized ? (
+                <Routes>
+                  <Route path="/" element={<CatalogPage />} />
+                  <Route path="/favorites" element={<FavoritesPage />} />
+                  <Route path="/product/:id" element={<ProductPage />}></Route>
+                  <Route path="*" element={<div>NOT FOUND 404</div>} />
+                </Routes>
+              ) : (
+                <Navigate to={"/not-found"} />
+              )}
+            </main>
+            {/* {hook % 2 === 0 ?  */}
+            <Footer />
+          </UserContext.Provider>
+        </CardsContext.Provider>
+      </ThemeContext.Provider>
+    </div>
+  );
 }
 
 export default App;
 
-{/* <button id="btn" onClick={clicker}>click me state</button>
-<input onChange={(e) => console.log(e.target.value)} /> */}
+{
+  /* <button id="btn" onClick={clicker}>click me state</button>
+<input onChange={(e) => console.log(e.target.value)} /> */
+}
 
-{/* <button id="btn" onClick={clicker}>click me state</button> */ }
+{
+  /* <button id="btn" onClick={clicker}>click me state</button> */
+}
 
-
-// useEffect(()=>{})  -- в данном случае, useEffect будет вызываться на каждый рендер компонента 
+// useEffect(()=>{})  -- в данном случае, useEffect будет вызываться на каждый рендер компонента
 // useEffect(()=>{}, [])  -- в данном случае, useEffect будет вызываться только один раз при маунтинге компента
 // useEffect(()=>{}, [какой нибудь вотчер])   --- в данном случае, useEffect будет вызываться каждый раз, когда изменится какой либо из элементов массива зависимостей
 
-  // const searcher = () => {
-  //    console.log(' i am searching >>>', search);
-  //   const filtered = data.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
-  //   console.log({ filtered });
+// const searcher = () => {
+//    console.log(' i am searching >>>', search);
+//   const filtered = data.filter(e => e.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+//   console.log({ filtered });
 
-  //   setCards(filtered);
-  // }
+//   setCards(filtered);
+// }

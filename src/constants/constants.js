@@ -1,3 +1,4 @@
+/* 1 СОРТИРОВКА */
 
 export const POPULAR = 'popular';
 export const NEWEST = 'newest';

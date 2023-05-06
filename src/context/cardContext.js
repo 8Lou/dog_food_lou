@@ -1,4 +1,4 @@
-
+/* 1 создание контекста */
 
 import React from 'react';
 
