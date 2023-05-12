@@ -7,7 +7,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { BackNavigate } from "../BackNavigate/BackNavigate";
+import { BackNavigate } from "../backNavigate/BackNavigate";
 
 export const Product = ({ product }) => {
   const navigate = useNavigate();

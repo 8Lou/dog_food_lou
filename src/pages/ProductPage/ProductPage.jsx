@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import { Product } from "../../components/Product/Product"
+import { Product } from "../../components/product/Product"
 import { api } from '../../utils/api'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 

@@ -4,7 +4,7 @@ import './index.css';
 import { ReactComponent as LogoSvg } from "../logo/logo.svg"; /* подключение логотипа svg */
 /* тогда в return прописывается: <Logo /> */
 import styles from './style.module.css'
-import { Search } from "../search/search";
+import { Search } from "../search/Search";
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Basket } from './img/basket.svg';

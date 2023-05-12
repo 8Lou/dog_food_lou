@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { CardList } from "./components/card_list/card_list.jsx";
-import { Footer } from "./components/footer/footer.jsx";
-import { Header } from "./components/header/header.jsx";
+/* import { CardList } from "./components/card_list/Card_list"; */
+import { Footer } from "./components/footer/Footer.jsx";
+import { Header } from "./components/header/Header.jsx";
 /* import data from './components/data/data.json' */
 
 import { api } from "./utils/api";
 import { useDebounce } from "./hooks/hooks";
-import { Product } from "./components/Product/Product";
-import { CatalogPage } from "./pages/CatalogPage/CatalogPage";
-import { ProductPage } from "./pages/ProductPage/ProductPage";
+/* import { Product } from "./components/product/Product"; */
+import { CatalogPage } from "./pages/catalogPage/CatalogPage";
+import { ProductPage } from "./pages/productPage/ProductPage";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { FavoritesPage } from "./pages/FavoritesPage/FavoritesPage";
-import { RouterAuth } from "./router/Router";
+import { FavoritesPage } from "./pages/favoritesPage/FavoritesPage";
+/* import { RouterAuth } from "./router/Router"; */
 import { UserContext } from "./context/userContext";
 import { CardsContext } from "./context/cardContext";
 import { ThemeContext } from "./context/themeContext";
@@ -49,12 +49,12 @@ function App() {
       setCards((state) => [
         ...state.slice(0, index),
         updatedCard,
-        ...state.slice(index + 1)
-      ])
+        ...state.slice(index + 1),
+      ]);
     }
     wasLiked
       ? // setFavorites/ delete
-        setFavorites((state) => state.filter(f => f._id !== updatedCard._id))
+        setFavorites((state) => state.filter((f) => f._id !== updatedCard._id))
       : // setFavorites/ add
         setFavorites((state) => [updatedCard, ...state]);
   };
@@ -63,7 +63,7 @@ function App() {
     if (!reviews || !reviews.length) {
       return 0;
     }
-    const res = reviews.reduce((acc, el) => acc += el.rating, 0);
+    const res = reviews.reduce((acc, el) => (acc += el.rating), 0);
     console.log(res / reviews.length);
     return res / reviews.length;
   };
@@ -76,38 +76,38 @@ function App() {
       /* отсортировать по возрастанию цены */
       const newCards = cards.sort((a, b) => a.price - b.price);
       setCards([...newCards]); /* ререндерить и вернуть явный новый массив */
-      return
+      return;
     }
     if (sortId === EXPENSIVE) {
       /* отсортировать по убыванию цены */
       const newCards = cards.sort((a, b) => b.price - a.price);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === POPULAR) {
       const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === NEWEST) {
       const newCards = cards.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
       setCards([...newCards]);
-      return
+      return;
     }
 
     if (sortId === SALE) {
       const newCards = cards.sort((a, b) => b.discount - a.discount);
       setCards([...newCards]);
-      return
+      return;
     }
     if (sortId === RATE) {
       const newCards = cards.sort(
         (a, b) => productRating(b.reviews) - productRating(a.reviews)
       );
       setCards([...newCards]);
-      return
+      return;
     }
   };
 
@@ -234,16 +234,16 @@ function App() {
 
               {/* <CardList cards={cards} /> */}
 
-              {isAuthorized ?
+              {isAuthorized ? (
                 <Routes>
                   <Route path="/" element={<CatalogPage />} />
                   <Route path="/favorites" element={<FavoritesPage />} />
                   <Route path="/product/:id" element={<ProductPage />}></Route>
                   <Route path="*" element={<div>NOT FOUND 404</div>} />
                 </Routes>
-                :
+              ) : (
                 <Navigate to={"/not-found"} />
-              }
+              )}
             </main>
             {/* {hook % 2 === 0 ?  */}
             <Footer />
@@ -256,8 +256,6 @@ function App() {
 
 export default App;
 
-
-  
 /* <input onChange={(e) => console.log(e.target.value)} /> */
 
 // useEffect(()=>{})  -- в данном случае, useEffect будет вызываться на каждый рендер компонента
