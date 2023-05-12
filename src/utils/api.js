@@ -53,13 +53,6 @@ class Api {
     }).then(onResponse)
   }
 }
-
-getProductById(id) {
-  return fetch(`${this.baseUrl}/products/${id}`, {
-    headers: this.headers,
-  }).then(onResponse)
-}
-
 const config = {
   baseUrl: 'https://api.react-learning.ru',
   headers: {

@@ -21,7 +21,7 @@ export const CatalogPage = () => {
     }
 
     const { cards, onSort, search } = useContext(CardsContext)
-    {/* сортировка с переводом*/}
+    /* сортировка с переводом*/
     const sortedItems = [{ id: POPULAR, title: 'Популярные' }, { id: NEWEST }, { id: CHEAPEST }, { id: RATE }, { id: EXPENSIVE }, { id: SALE }];
 
 

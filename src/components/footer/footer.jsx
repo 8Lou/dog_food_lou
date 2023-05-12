@@ -36,7 +36,7 @@ export const Footer = () => {
 
     // console.log('last message');
 
-    return <div>    footer
+    return <div>
 
         <h1 style={style}>FOOTER</h1>
         {/* <h1 style='color: red'>FOOTER</h1>  deprecated */}

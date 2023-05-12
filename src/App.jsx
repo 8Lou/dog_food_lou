@@ -49,12 +49,12 @@ function App() {
       setCards((state) => [
         ...state.slice(0, index),
         updatedCard,
-        ...state.slice(index + 1),
-      ]);
+        ...state.slice(index + 1)
+      ])
     }
     wasLiked
       ? // setFavorites/ delete
-        setFavorites((state) => state.filter((f) => f._id !== updatedCard._id))
+        setFavorites((state) => state.filter(f => f._id !== updatedCard._id))
       : // setFavorites/ add
         setFavorites((state) => [updatedCard, ...state]);
   };
@@ -63,50 +63,51 @@ function App() {
     if (!reviews || !reviews.length) {
       return 0;
     }
-    const res = reviews.reduce((acc, el) => (acc += el.rating), 0);
+    const res = reviews.reduce((acc, el) => acc += el.rating, 0);
     console.log(res / reviews.length);
     return res / reviews.length;
   };
 
   /* 2 СОРТИРОВКА */
+  /* функция онсорт прописывать до юзэффект */
   const onSort = (sortId) => {
     /* если sortId === CHEAPEST, */
     if (sortId === CHEAPEST) {
       /* отсортировать по возрастанию цены */
       const newCards = cards.sort((a, b) => a.price - b.price);
-      setCards([...newCards]);
-      return;
+      setCards([...newCards]); /* ререндерить и вернуть явный новый массив */
+      return
     }
     if (sortId === EXPENSIVE) {
       /* отсортировать по убыванию цены */
       const newCards = cards.sort((a, b) => b.price - a.price);
       setCards([...newCards]);
-      return;
+      return
     }
     if (sortId === POPULAR) {
       const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
       setCards([...newCards]);
-      return;
+      return
     }
     if (sortId === NEWEST) {
       const newCards = cards.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
       setCards([...newCards]);
-      return;
+      return
     }
 
     if (sortId === SALE) {
       const newCards = cards.sort((a, b) => b.discount - a.discount);
       setCards([...newCards]);
-      return;
+      return
     }
     if (sortId === RATE) {
       const newCards = cards.sort(
         (a, b) => productRating(b.reviews) - productRating(a.reviews)
       );
       setCards([...newCards]);
-      return;
+      return
     }
   };
 
@@ -175,8 +176,8 @@ function App() {
     Promise.all([api.getUserInfo(), api.getProductList()]).then(
       ([userData, data]) => {
         setUser(userData);
-        const filtered = filteredCards(data.products);
-        setCards(filtered);
+        const filtered = filteredCards(data.products); /* получение товаров */
+        setCards(filtered); /* надо получить отлайканные */
         const fav = filtered.filter((e) => findLiked(e, userData._id));
         // const fav = filtered.filter(e => e.likes.some(el => el === userData._id));
         setFavorites(fav);
@@ -221,9 +222,8 @@ function App() {
   /*  2 КОНТЕКСТ вставить туда, где нужно увидеть */
   return (
     <div className={`app__${theme ? "light" : "dark"} `}>
+      {/* смена темы */}
       <ThemeContext.Provider value={theme}>
-        {" "}
-        {/* смена темы */}
         <CardsContext.Provider value={cardsValue}>
           <UserContext.Provider value={user}>
             <Header setSearch={setSearch} favorites={favorites}></Header>
@@ -234,16 +234,16 @@ function App() {
 
               {/* <CardList cards={cards} /> */}
 
-              {isAuthorized ? (
+              {isAuthorized ?
                 <Routes>
                   <Route path="/" element={<CatalogPage />} />
                   <Route path="/favorites" element={<FavoritesPage />} />
                   <Route path="/product/:id" element={<ProductPage />}></Route>
                   <Route path="*" element={<div>NOT FOUND 404</div>} />
                 </Routes>
-              ) : (
+                :
                 <Navigate to={"/not-found"} />
-              )}
+              }
             </main>
             {/* {hook % 2 === 0 ?  */}
             <Footer />
@@ -256,14 +256,9 @@ function App() {
 
 export default App;
 
-{
-  /* <button id="btn" onClick={clicker}>click me state</button>
-<input onChange={(e) => console.log(e.target.value)} /> */
-}
 
-{
-  /* <button id="btn" onClick={clicker}>click me state</button> */
-}
+  
+/* <input onChange={(e) => console.log(e.target.value)} /> */
 
 // useEffect(()=>{})  -- в данном случае, useEffect будет вызываться на каждый рендер компонента
 // useEffect(()=>{}, [])  -- в данном случае, useEffect будет вызываться только один раз при маунтинге компента
