@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-/* import { CardList } from "./components/card_list/Card_list"; */
+import { CardList } from "./components/card_list/CardList";
 import { Footer } from "./components/footer/Footer.jsx";
 import { Header } from "./components/header/Header.jsx";
 /* import data from './components/data/data.json' */
 
 import { api } from "./utils/api";
 import { useDebounce } from "./hooks/hooks";
-/* import { Product } from "./components/product/Product"; */
+import { Product } from "./components/product/Product";
 import { CatalogPage } from "./pages/catalogPage/CatalogPage";
 import { ProductPage } from "./pages/productPage/ProductPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { FavoritesPage } from "./pages/favoritesPage/FavoritesPage";
-/* import { RouterAuth } from "./router/Router"; */
+import { RouterAuth } from "./router/Router";
 import { UserContext } from "./context/userContext";
 import { CardsContext } from "./context/cardContext";
 import { ThemeContext } from "./context/themeContext";
@@ -25,6 +25,11 @@ import {
   RATE,
   SALE,
 } from "./constants/constants";
+import { AntdPage } from "./pages/AntdPage/AntdPage";
+import { Form } from "./components/Form/Form";
+import { RegistrationForm } from "./components/Form/RegistrationForm";
+import { Modal } from "./components/Modal/Modal";
+import { LoginForm } from "./components/Auth/Login/Login";
 
 // const [example, setExample] = useState(); нельзя!
 
@@ -33,18 +38,20 @@ function App() {
   // состояние карточек
   /* объявляется хук с первоначальным значением 0 */
   /* const [hook, setHook] = useState(0); */
+
   const [cards, setCards] = useState([]);
   const [search, setSearch] = useState(undefined);
-  const [user, setUser] = React.useState({}); /* можно и так */
+  const [user, setUser] = React.useState({});
   const [isAuthorized, setAuth] = useState(true);
   const [favorites, setFavorites] = useState([]);
   const [theme, setTheme] = useState(true);
+  const [modalActive, setModalActive] = useState(false);
 
   const debounceValueInApp = useDebounce(search);
 
   const handleProductLike = async (product, wasLiked) => {
     const updatedCard = await api.changeProductLike(product._id, wasLiked);
-    const index = cards.findIndex((e) => e._id === updatedCard._id);
+    const index = cards.findIndex((e) => e._id === updatedCard?._id);
     if (index !== -1) {
       setCards((state) => [
         ...state.slice(0, index),
@@ -57,6 +64,8 @@ function App() {
         setFavorites((state) => state.filter((f) => f._id !== updatedCard._id))
       : // setFavorites/ add
         setFavorites((state) => [updatedCard, ...state]);
+
+    return wasLiked;
   };
 
   const productRating = (reviews) => {
@@ -64,22 +73,58 @@ function App() {
       return 0;
     }
     const res = reviews.reduce((acc, el) => (acc += el.rating), 0);
-    console.log(res / reviews.length);
     return res / reviews.length;
   };
 
-  /* 2 СОРТИРОВКА */
-  /* функция онсорт прописывать до юзэффект */
   const onSort = (sortId) => {
-    /* если sortId === CHEAPEST, */
+    switch (sortId) {
+      case CHEAPEST:
+        return setCards((state) => [
+          ...state.sort((a, b) => a.price - b.price),
+        ]);
+      case EXPENSIVE:
+        return setCards((state) => [
+          ...state.sort((a, b) => b.price - a.price),
+        ]);
+      case POPULAR:
+        return setCards((state) => [
+          ...state.sort((a, b) => b.likes.length - a.likes.length),
+        ]);
+      case NEWEST:
+        return setCards((state) => [
+          ...state.sort(
+            (a, b) => new Date(b.created_at) - new Date(a.created_at)
+          ),
+        ]);
+      case SALE:
+        return setCards((state) => [
+          ...state.sort((a, b) => b.discount - a.discount),
+        ]);
+      case RATE:
+        return setCards((state) => [
+          ...state.sort(
+            (a, b) => productRating(b.reviews) - productRating(a.reviews)
+          ),
+        ]);
+      default:
+        return setCards((state) => [
+          ...state.sort((a, b) => a.price - b.price),
+        ]);
+    }
+  };
+
+  /* 2 СОРТИРОВКА старый вариант*/
+  /* функция онсорт прописывать до юзэффект */
+  /* const onSort = (sortId) => {
+     если sortId === CHEAPEST, 
     if (sortId === CHEAPEST) {
-      /* отсортировать по возрастанию цены */
+      /* отсортировать по возрастанию цены 
       const newCards = cards.sort((a, b) => a.price - b.price);
-      setCards([...newCards]); /* ререндерить и вернуть явный новый массив */
+      setCards([...newCards]); ререндерить и вернуть явный новый массив
       return;
     }
     if (sortId === EXPENSIVE) {
-      /* отсортировать по убыванию цены */
+      отсортировать по убыванию цены 
       const newCards = cards.sort((a, b) => b.price - a.price);
       setCards([...newCards]);
       return;
@@ -109,7 +154,7 @@ function App() {
       setCards([...newCards]);
       return;
     }
-  };
+  }; */
 
   /* const [bigdata, setBigdata] = useState([]); */
 
@@ -192,6 +237,9 @@ function App() {
     search,
     favorites,
     onSort,
+    setModalActive,
+    productRating,
+    user,
   };
 
   /* если нет поиска, то остановить фильтрацию */
@@ -220,6 +268,28 @@ function App() {
   /* console.log({ user }); */
 
   /*  2 КОНТЕКСТ вставить туда, где нужно увидеть */
+
+  const authRoutes = (
+    <>
+      <Route
+        path="/register"
+        element={
+          <Modal modalActive={modalActive} setModalActive={setModalActive}>
+            <RegistrationForm />
+          </Modal>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <Modal modalActive={modalActive} setModalActive={setModalActive}>
+            <LoginForm />
+          </Modal>
+        }
+      />
+    </>
+  );
+
   return (
     <div className={`app__${theme ? "light" : "dark"} `}>
       {/* смена темы */}
@@ -227,25 +297,26 @@ function App() {
         <CardsContext.Provider value={cardsValue}>
           <UserContext.Provider value={user}>
             <Header setSearch={setSearch} favorites={favorites}></Header>
-            <button onClick={() => setTheme(!theme)}>change theme</button>{" "}
+
+            {/* <button onClick={() => setTheme(!theme)}>change theme</button>*/}
             {/* кнопка смены темы */}
+
             <main className="container content">
               {/* <button id="btn" onClick={clicker}>click me state</button> */}
-
               {/* <CardList cards={cards} /> */}
-
               {isAuthorized ? (
                 <Routes>
                   <Route path="/" element={<CatalogPage />} />
                   <Route path="/favorites" element={<FavoritesPage />} />
                   <Route path="/product/:id" element={<ProductPage />}></Route>
+                  {authRoutes}
+                  <Route path="/stylebook" element={<AntdPage />} />
                   <Route path="*" element={<div>NOT FOUND 404</div>} />
                 </Routes>
               ) : (
                 <Navigate to={"/not-found"} />
               )}
             </main>
-            {/* {hook % 2 === 0 ?  */}
             <Footer />
           </UserContext.Provider>
         </CardsContext.Provider>

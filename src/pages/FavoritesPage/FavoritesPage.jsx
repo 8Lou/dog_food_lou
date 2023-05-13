@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-/* import { Product } from "../../components/product/Product"; */
+import { Product } from "../../components/product/Product";
 import "./index.css";
 import { BackNavigate } from "../../components/backNavigate/BackNavigate";
 import { CardList } from "../../components/cardList/CardList";

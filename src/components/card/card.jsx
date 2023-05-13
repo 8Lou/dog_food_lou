@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./index.css";
+import "./index.scss";
 
 import { ReactComponent as Like } from "./img/like.svg";
 import { api } from "../../utils/api";

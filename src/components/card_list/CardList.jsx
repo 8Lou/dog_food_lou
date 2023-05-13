@@ -13,10 +13,8 @@ export const CardList = ({ cards }) => {
           <Card
             key={item.updated_at}
             {...item}
-            product={item} /* userId={userId} handleLike={handleLike} */
-          />
-        ); //передать product в card/деструктуризация
-      })}
-    </div>
-  );
-};
+            product={item}/>})}
+    </div>);};
+
+{/* userId={userId} handleLike={handleLike} */}
+{/* передать product в card/деструктуризация */}

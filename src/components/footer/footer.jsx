@@ -28,7 +28,7 @@ export const Footer = () => {
     useEffect(() => {
         // console.log('>>> working footer');
         // document.addEventListener('keydown', listener);
-        return () => console.log("UNMOUNT");
+        // return () => console.log("UNMOUNT");
     }, []);
 
     const style = { color: 'red', marginTop: '100px', marginLeft: '100px' }
