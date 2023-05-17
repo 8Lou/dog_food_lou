@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { CardList } from "./components/card_list/CardList";
 import { Footer } from "./components/footer/Footer.jsx";
@@ -32,9 +32,10 @@ import { Modal } from "./components/Modal/Modal";
 import { LoginForm } from "./components/Auth/Login/Login";
 
 // const [example, setExample] = useState(); нельзя!
-
 //создание компонентов для переиспользования
+
 function App() {
+
   // состояние карточек
   /* объявляется хук с первоначальным значением 0 */
   /* const [hook, setHook] = useState(0); */
@@ -49,24 +50,19 @@ function App() {
 
   const debounceValueInApp = useDebounce(search);
 
-  const handleProductLike = async (product, wasLiked) => {
+  const handleProductLike = useCallback(async (product, wasLiked) => {
     const updatedCard = await api.changeProductLike(product._id, wasLiked);
-    const index = cards.findIndex((e) => e._id === updatedCard?._id);
-    if (index !== -1) {
-      setCards((state) => [
-        ...state.slice(0, index),
-        updatedCard,
-        ...state.slice(index + 1),
-      ]);
-    }
-    wasLiked
-      ? // setFavorites/ delete
-        setFavorites((state) => state.filter((f) => f._id !== updatedCard._id))
-      : // setFavorites/ add
-        setFavorites((state) => [updatedCard, ...state]);
+    setCards(s => [...s.map(e => e._id === updatedCard?._id ? updatedCard : e)]);
+
+    wasLiked ?
+    // setFavorites/ delete
+setFavorites((state) => state.filter(f => f._id !== updatedCard._id))
+      :
+      // setFavorites/ add
+      setFavorites((state) => [updatedCard, ...state])
 
     return wasLiked;
-  };
+  }, [])
 
   const productRating = (reviews) => {
     if (!reviews || !reviews.length) {
@@ -123,34 +119,14 @@ function App() {
       setCards([...newCards]); ререндерить и вернуть явный новый массив
       return;
     }
-    if (sortId === EXPENSIVE) {
-      отсортировать по убыванию цены 
-      const newCards = cards.sort((a, b) => b.price - a.price);
-      setCards([...newCards]);
-      return;
-    }
+,,,
     if (sortId === POPULAR) {
       const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
       setCards([...newCards]);
       return;
     }
-    if (sortId === NEWEST) {
-      const newCards = cards.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
-      setCards([...newCards]);
-      return;
-    }
-
     if (sortId === SALE) {
       const newCards = cards.sort((a, b) => b.discount - a.discount);
-      setCards([...newCards]);
-      return;
-    }
-    if (sortId === RATE) {
-      const newCards = cards.sort(
-        (a, b) => productRating(b.reviews) - productRating(a.reviews)
-      );
       setCards([...newCards]);
       return;
     }
@@ -269,8 +245,7 @@ function App() {
 
   /*  2 КОНТЕКСТ вставить туда, где нужно увидеть */
 
-  const authRoutes = (
-    <>
+  const authRoutes = <>
       <Route
         path="/register"
         element={
@@ -288,7 +263,6 @@ function App() {
         }
       />
     </>
-  );
 
   return (
     <div className={`app__${theme ? "light" : "dark"} `}>
@@ -304,18 +278,19 @@ function App() {
             <main className="container content">
               {/* <button id="btn" onClick={clicker}>click me state</button> */}
               {/* <CardList cards={cards} /> */}
-              {isAuthorized ? (
+              {isAuthorized ?
                 <Routes>
                   <Route path="/" element={<CatalogPage />} />
                   <Route path="/favorites" element={<FavoritesPage />} />
-                  <Route path="/product/:id" element={<ProductPage />}></Route>
+                  <Route path="/product/:id" element={<ProductPage />} >
+                  </Route>
                   {authRoutes}
                   <Route path="/stylebook" element={<AntdPage />} />
                   <Route path="*" element={<div>NOT FOUND 404</div>} />
                 </Routes>
-              ) : (
+                :
                 <Navigate to={"/not-found"} />
-              )}
+              }
             </main>
             <Footer />
           </UserContext.Provider>
@@ -324,6 +299,7 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
 
