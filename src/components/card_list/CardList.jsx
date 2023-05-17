@@ -6,7 +6,7 @@ import "./index.css";
 /* РЕНДЕРИНГ КАРТОЧЕК */
 /* export const CardList = ({ cards, userId, handleLike }) => { */ //деструктуризация. Компонент получает данные
 export const CardList = ({ cards }) => {
-  return (
+  return 
     <div className="cards">
       {cards.map((item) => {
         return (

@@ -44,6 +44,7 @@ export const CatalogPage = () => {
     { id: SALE },
   ];
 
+  /* пагинация */
   const optionsSize = [
     {
       value: 10,
@@ -88,14 +89,13 @@ export const CatalogPage = () => {
 
   return (
     <>
-      {search && (
+      {search && 
         <p className="search">
-          {" "}
           По запросу <b>{search}</b> {cards.length === 1 ? "найден" : "найдено"}{" "}
           {cards.length}
           {getEndings(cards.length)}
         </p>
-      )}
+      }
       <div className="sort-cards">
         {sortedItems.map((e) => (
           <span className="sort-item" key={e.id} onClick={() => onSort(e.id)}>
@@ -106,6 +106,7 @@ export const CatalogPage = () => {
       <CardList cards={cards} />
 
       <div>
+        {/* пагинация */}
         <span>size page</span>
         <Select
           defaultValue={10}

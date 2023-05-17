@@ -55,7 +55,9 @@ export const ProductPage = () => {
     //     }
     // }, [location, navigate]);
 
-
+ //   ВОПРОСЫ С
+// {!!Object.keys(product).length ?  -- проверка пустой ли объект
+// JSON.stringify(product) === '{}' ? -- то же самое 2й вариант
 
 
 
