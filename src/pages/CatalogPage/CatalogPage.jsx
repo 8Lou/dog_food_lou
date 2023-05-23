@@ -89,41 +89,27 @@ export const CatalogPage = () => {
 
   return (
     <>
-      {search && 
-        <p className="search">
-          По запросу <b>{search}</b> {cards.length === 1 ? "найден" : "найдено"}{" "}
-          {cards.length}
-          {getEndings(cards.length)}
-        </p>
-      }
-      <div className="sort-cards">
-        {sortedItems.map((e) => (
-          <span className="sort-item" key={e.id} onClick={() => onSort(e.id)}>
-            {e.id}
-          </span>
-        ))}
-      </div>
-      <CardList cards={cards} />
+            {search && <p className='search'> По запросу <b>{search}</b> {cards.length === 1 ? 'найден' : 'найдено'}  {cards.length}{getEndings(cards.length)}</p>}
+            <div className='sort-cards'>
+                {sortedItems.map(e =>
+                    <span className='sort-item' key={e.id} onClick={() => onSort(e.id)}>{e.id}</span>
+                )}
+            </div>
+            <CardList cards={cards} />
 
       <div>
         {/* пагинация */}
-        <span>size page</span>
-        <Select
-          defaultValue={10}
-          style={{ width: 120 }}
-          onChange={handleChangeSize}
-          options={optionsSize}
-        />
-      </div>
-      <div>
-        <span>number page</span>
-        <Select
-          defaultValue={1}
-          style={{ width: 120 }}
-          onChange={handleChangePage}
-          options={optionsPage}
-        />
-      </div>
-    </>
-  );
-};
+                <span>
+                    size page
+                </span>
+                <Select defaultValue={10} style={{ width: 120 }} onChange={handleChangeSize} options={optionsSize} />
+            </div>
+            <div>
+                <span>
+                    number page
+                </span>
+                <Select defaultValue={1} style={{ width: 120 }} onChange={handleChangePage} options={optionsPage} />
+            </div>
+        </>
+    )
+}

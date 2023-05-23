@@ -13,6 +13,7 @@ import { ReactComponent as Like } from "../Card/img/like.svg";
 import { CardsContext } from "../../context/cardContext";
 
 export const Header = (props) => {
+
   const setSearchQuery = (path) => {
     // console.log({path});
     props.setSearch(path);
@@ -22,12 +23,11 @@ export const Header = (props) => {
 
   const { favorites, setModalActive } = useContext(CardsContext);
 
-  return (
-    <div className="header">
-      <div className="container">
-        <div className="header__wrapper">
-          <Link to={"/"}>
-            <LogoSvg className="logo" />
+return <div className="header">
+        <div className='container'>
+            <div className='header__wrapper'>
+                <Link to={'/'}>
+                    <LogoSvg className='logo' />
             {/* достать компонент вместо применения img */}
           </Link>
           {/*  <Logo /> */} {/* 1й способ подключить компонент-логотип */}
@@ -37,9 +37,9 @@ export const Header = (props) => {
           <div className="header__icons">
             <Link className="header__fav" to={"/favorites"}>
               <Like className="header__like" />
-              {!!favorites.length && (
+              {!!favorites.length && 
                 <span className="header__bubble">{favorites.length}</span>
-              )}
+              }
               {/* использовать роут */}
             </Link>
             <Basket className="header__icon" />
@@ -51,5 +51,4 @@ export const Header = (props) => {
         </div>
       </div>
     </div>
-  );
 };

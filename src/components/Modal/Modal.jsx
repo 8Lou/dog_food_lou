@@ -5,6 +5,7 @@ import "./index.scss";
 import { RegistrationForm } from "../Form/RegistrationForm";
 
 export const Modal = ({ setModalActive, modalActive, children }) => {
+  
   const closeOnEsc = useCallback(
     (e) => {
       if (e.key === "Escape") {

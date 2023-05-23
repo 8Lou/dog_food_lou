@@ -23,16 +23,15 @@ const Button = styled.div`
 /* 2 из способов инлайн стилизации */
 export const Footer = () => {
 
-    const listener = (e) => console.log(e.key)
+    /* const listener = (e) => console.log(e.key) */
 
-    useEffect(() => {
+    //useEffect(() => {
         // console.log('>>> working footer');
         // document.addEventListener('keydown', listener);
         // return () => console.log("UNMOUNT");
-    }, []);
+    //}, []);
 
     const style = { color: 'red', marginTop: '100px', marginLeft: '100px' }
-
 
     // console.log('last message');
 

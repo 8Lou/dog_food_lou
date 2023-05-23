@@ -6,15 +6,15 @@ import "./index.css";
 /* РЕНДЕРИНГ КАРТОЧЕК */
 /* export const CardList = ({ cards, userId, handleLike }) => { */ //деструктуризация. Компонент получает данные
 export const CardList = ({ cards }) => {
-  return 
+  return (
     <div className="cards">
       {cards.map((item) => {
-        return (
+        return 
           <Card
             key={item.updated_at}
             {...item}
             product={item}/>})}
     </div>);};
 
-{/* userId={userId} handleLike={handleLike} */}
-{/* передать product в card/деструктуризация */}
+/* userId={userId} handleLike={handleLike} */
+/* передать product в card/деструктуризация */

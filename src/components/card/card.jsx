@@ -18,7 +18,7 @@ export const Card = ({
   gender,
   likes,
   discount,
-  userId,
+  /* userId, */
   product,
   ...args
 }) => {
@@ -62,19 +62,17 @@ export const Card = ({
     <div className={` card card__${theme ? "light" : "dark"} `}>
       <div className="card__sticky card__sticky_type_top-left">
         {!!discount && <span className="card__discount">-{discount}%</span>}
-        {args.tags.map((e) => (
-          <span className={`tag tag_type_${e}`} key={e}>
-            {e}
-          </span>
-        ))}
+        {args.tags.map(e => <span className={`tag tag_type_${e}`} key={e}>
+            {e}</span>)}
       </div>
       <div className="card__sticky card__sticky_type_top-right">
+
         <button
           onClick={handleClick}
-          className={`card__favorite ${isLiked ? "card__favorite_active" : ""}`}
-        >
+          className={`card__favorite ${isLiked ? "card__favorite_active" : ""}`}>
           <Like />
         </button>
+        
       </div>
       <Link to={`/product/${product._id}`} className="card__link">
         <img src={pictures ?? image} alt="food" className="card__image" />

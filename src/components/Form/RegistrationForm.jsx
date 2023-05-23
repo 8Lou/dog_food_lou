@@ -21,8 +21,7 @@ const         sendedData = {...data, tags: data.tags.split(' ')}
         //    await  api.updateUser(sendedData)
     }
 
-    console.log({tags});
-
+    //console.log({tags});
     // console.log({ errors });
 
     const nameRegister = {

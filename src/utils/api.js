@@ -1,6 +1,6 @@
 const onResponse = (res) => {
-  return res.json()
-}
+  return res.ok ? res.json() : Promise.reject('Error')
+} 
 /* конструктор-скелет через классы */
 /* необходим для повторяющихся функций, для этого нужна переменная */
 class Api {
@@ -9,8 +9,8 @@ class Api {
     this.headers = data.headers;
   }
   /* метод */
-  getProductList() {
-    return fetch(`${this.baseUrl}/products`, {
+  getProductList(page = 1, limit = 15) {
+    return fetch(`${this.baseUrl}/products?page=${page}&limit=${limit}`, {
       method: "GET",
       headers: this.headers,
     }).then(onResponse);
@@ -50,6 +50,20 @@ class Api {
   getProductById(id) {
     return fetch(`${this.baseUrl}/products/${id}`, {
       headers: this.headers,
+    }).then(onResponse)
+  }
+
+  addProductReview(productId, data) {
+    return fetch(`${this.baseUrl}/products/review/${productId}`, {
+      headers: this.headers,
+      method: "POST",
+      body: JSON.stringify(data)
+    }).then(onResponse)
+  }
+  deleteProductReview(productId, reviewId) {
+    return fetch(`${this.baseUrl}/products/review/${productId}/${reviewId}`, {
+      headers: this.headers,
+      method: "DELETE",
     }).then(onResponse)
   }
 }
