@@ -48,6 +48,8 @@ export const Card = ({
 
     // const resp = await api.changeProductLike(product._id, isLiked);
     // console.log({ resp })
+
+    /* setIsProductLiked(!isLikedProduct) оптимистичный прогноз - твердое решение неждать запрос*/
   };
 
   // console.log(isLiked);

@@ -29,18 +29,18 @@ console.log({productRating});
   //     }
   // }, [location, navigate]);
 
-    const onProductLike = useCallback(async (item, isLikedProduct) => {
+    const onProductLike = useCallback(async (item, isLikedProduct) => {//пессимистичный сценарий :
         const wasLiked = await handleLike(item, isLikedProduct);
         if (wasLiked) {
-            const filteredLikes = item.likes.filter(e => e !== user?._id);
-            setProduct((s) => ({ ...s, likes: filteredLikes }))
+            const filteredLikes = item.likes.filter(e => e !== user?._id);//если фильтруем, то е не должен равен  юзер_айди
+            setProduct((s) => ({ ...s, likes: filteredLikes }))//вернуть предыдущее состояние и обновить
         } else {
-            const addLikes = [...item.likes, user?._id];
+            const addLikes = [...item.likes, user?._id];//иначе спред.массив и добавить юзер_айди
             setProduct((s) => ({ ...s, likes: addLikes }))
         }
-    }, [handleLike, user?._id])
+    }, [handleLike, user?._id]) 
 
-    const sendReview = useCallback(async data => {
+    const sendReview = useCallback(async data => { /* отзывы */
         const result = await api.addProductReview(product._id, data);
         setProduct(() => ({ ...result }))
     }, [product._id])

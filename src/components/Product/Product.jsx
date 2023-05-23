@@ -46,8 +46,9 @@ const { user } = useContext(CardsContext);
     return (price - Math.floor((price * discount) / 100)).toFixed(0);
   };
 
+  //следить, лайк товара
   useEffect(() => {
-    const isLiked = product.likes.some(e => e === user?._id);
+    const isLiked = product.likes.some(e => e === user?._id); //пришел ли юзер?
     setIsProductLike(isLiked);
   }, [product.likes, user]);
 
@@ -105,8 +106,9 @@ const { user } = useContext(CardsContext);
                         </div>
                         <BaseButton>В корзину</BaseButton>
 
-                    </div>
+                    </div> {/* ЛАЙКИ 1: поставлен лайк */}
                     <button className={cn(s.favorite, { [s.favoriteActive]: isLikedProduct })} onClick={handleClick}>
+                      {/* применить favoriteActive тогда, когда продукт лайкан */}
                         <Like />
                         <span>{isLikedProduct ? 'В избранном' : 'В избранное'}</span>
                     </button>
